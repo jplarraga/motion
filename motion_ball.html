@@ -1,0 +1,108 @@
+<body>
+
+<!--   We start by creating the shape we want and which we will use to create motion-->
+    
+    <div id="ball" style="
+      z-index:5;
+      position:absolute;
+      left:0px;
+      top:0px;
+      width:50px;
+      height:50px;
+      border-radius:50%;
+      background: rgb(7, 184, 237)"></div>
+    
+    <script>
+    // We then star creating the variables we will use in this excercise
+
+    //In this case we will need a variable for velocity and position in each of the axis
+    var velocityX = 20;
+    var velocityY = 10;
+    var positionX = 0;
+    var positionY = 0;
+
+    //Then we store in a new variable the shape previously created 
+    var ball = document.getElementById('ball');
+    
+
+    //We set the variables that will be helping us to change the orientation of our shape
+    reverseX = false;
+    reverseY = false;
+    
+    
+    //For this example will will need to create another ball that will help us trace the trajectory of the ball
+    var create = function(x, y, color){
+      var div = document.createElement('div');
+      div.id = 'ball';
+      div.style.zIndex = '1';
+      div.style.position = 'absolute';
+      div.style.left = x+ 'px';
+      div.style.top = y +'px';
+      div.style.width = '15px';
+      div.style.height = '15px';
+      div.style.borderRadius = '50%';
+      div.style.background = color;
+      document.getElementsByTagName('body')[0].appendChild(div);
+      return div;
+    };
+        
+    //We will set a random color for the balls that will create the trace of the motion ball
+    var r = Math.floor(255*(Math.random()));
+    var g = Math.floor(255*(Math.random()));
+    var b = Math.floor(255*(Math.random()));
+    
+    var color ='rgb(' + r + ', ' + g + ', ' + b + ')';
+    
+    // We start creating the motion ball function
+
+    function motionXY(){
+    
+        //Since we want to set the limits, we store them in a constant variable
+
+      const xMax = 850;
+      const xMin = 0;
+      const yMax = 500;
+      const yMin = 0;
+    
+      //If the position of the ball hits the max or min limit, it will cause the variable reverse to be the oposite
+      if(positionX >= xMax || positionX <= xMin){
+        reverseX = !reverseX;
+      }
+      
+      //If the variable reverse is false then the direction of the ball will be set by the positionX plus the velocityX
+      if(reverseX){
+        positionX = positionX + velocityX;
+        ball.style.left = positionX+'px';
+      }else{ //otherwize it will be set by the position of x minus the velocity of X
+        positionX = positionX - velocityX;
+        ball.style.left = positionX + 'px';
+      }
+      
+      //The same is the case for the vertical orientation
+      if(positionY >= yMax || positionY <= yMin){
+        reverseY = !reverseY;
+      }
+    
+      if(reverseY){
+        positionY = positionY + velocityY;
+        ball.style.top = positionY+'px';
+      }else{
+        positionY = positionY - velocityY;
+        ball.style.top = positionY+'px';
+      }
+    
+      //Finally if we want to set the trace we will set a condirion if the position in Y of the ball is on the limits it will leave a trace
+
+      //Every move of the ball will create a smaller ball and will indicate that the bigger ball passed by certain position.
+      if(positionY <= yMax) {
+        create(positionX, positionY, color);
+         
+      }
+    
+    }
+     //Finally we create the interval of the function that will be executed every 50 miliseconds. 
+    setInterval(motionXY, 50)
+    
+    </script>
+    
+    </body>
